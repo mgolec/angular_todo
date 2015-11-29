@@ -5,7 +5,7 @@
 var app = angular.module('todoApp', []);
 
 app.controller('myCtrl', function ($scope) {
-
+    llas
     $scope.firstName = "john";
     $scope.lastName = "doe";
 
