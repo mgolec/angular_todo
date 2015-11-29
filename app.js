@@ -14,3 +14,4 @@ app.controller('myCtrl', function ($scope) {
     this.firstName = "john";
     this.lastName = "snow";
 });
+dd
