@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular.min.js"></script>
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="app.css">
+
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="app.js"></script>
 
 <head>
@@ -10,12 +16,40 @@
 </head>
 <body ng-app="todoApp">
 
-<div ng-controller="myCtrl as my">
+<nav class="navbar navbar-default">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">My To Do App</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+        </ul>
+    </div>
+</nav>
 
-    <p>first name: {{my.firstName}} </p>
+<div class="container" ng-controller="IndexPageController">
+    <div class="row">
+        <div class="col-lg-6">
+            <input class="input-lg form-control fg-input" type="text" ng-model="query" placeholder="Search my to do's">
+            <ul style="list-style: none;">
+                <li ng-repeat="todo in list | filter:query">
+                    <h3 class="{{todo.done ? 'line-through' : ''}}">
+                        <input type="checkbox" ng-model="todo.done">
+                        {{todo.name}}</h3>
+                </li>
+            </ul>
+        </div>
 
-    <p>last name: {{my.lastName}}</p>
+        <div class="col-lg-6">
+            <form ng-submit="submit()">
+                <input class="input-lg form-control fg-input" type="text" ng-model="newItem"
+                       placeholder="Add some to do"/>
+                <br/>
+                <button class="btn btn-default" type="submit">Add new to do</button>
+            </form>
+        </div>
 
+    </div>
 </div>
 
 </body>

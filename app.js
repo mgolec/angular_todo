@@ -4,12 +4,16 @@
 
 var app = angular.module('todoApp', []);
 
-app.controller('myCtrl', function ($scope) {
-    $scope.firstName = "john";
-    $scope.lastName = "doe";
+app.controller('IndexPageController', function ($scope) {
+    //app logic
 
-    console.log($scope);
+    $scope.list = [];
+    $scope.submit = function () {
+        $scope.list.push({
+            name: $scope.newItem,
+            done: false
+        });
+        $scope.newItem = "";
+    };
 
-    this.firstName = "john";
-    this.lastName = "snow";
 });
