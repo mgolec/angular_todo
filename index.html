@@ -10,6 +10,16 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="app.js"></script>
 
+<!--
+ _____           _____   _____
+|  __ \         |  __ \ / ____|
+| |__) | __ ___ | |__) | (___
+|  ___/ '__/ _ \|  ___/ \___ \
+| |   | | | (_) | |     ____) |
+|_|   |_|  \___/|_|    |_____/
+
+-->
+
 <head>
     <meta charset="UTF-8">
     <title>todo</title>
@@ -33,9 +43,7 @@
             <input class="input-lg form-control fg-input" type="text" ng-model="query" placeholder="Search my to do's">
             <ul style="list-style: none;">
                 <li ng-repeat="todo in list | filter:query">
-                    <h3 class="{{todo.done ? 'line-through' : ''}}">
-                        <input type="checkbox" ng-model="todo.done">
-                        {{todo.name}}</h3>
+                    <todo-item></todo-item>
                 </li>
             </ul>
         </div>
