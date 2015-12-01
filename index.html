@@ -8,6 +8,8 @@
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/ngstorage/ngStorage.min.js"></script>
+<script src="bower_components/underscore/underscore-min.js"></script>
 <script src="app.js"></script>
 
 <!--
@@ -42,8 +44,8 @@
         <div class="col-lg-6">
             <input class="input-lg form-control fg-input" type="text" ng-model="query" placeholder="Search my to do's">
             <ul style="list-style: none;">
-                <li ng-repeat="todo in list | filter:query">
-                    <todo-item todo="todo"></todo-item>
+                <li ng-repeat="todo in list | filter:query track by $index">
+                    <todo-item todo="todo" update="update(todo)"></todo-item>
                 </li>
             </ul>
         </div>

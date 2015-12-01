@@ -2,43 +2,85 @@
  * Created by Laptop on 27.11.2015..
  */
 
-var app = angular.module('todoApp', []);
+var app = angular.module('todoApp', ['ngStorage']);
+app.constant('_', _);
 
 app.controller('IndexPageController', ['$scope', 'API', function ($scope, API) {
     //app logic
 
     $scope.list = API.get();
     $scope.submit = function () {
-        $scope.list = API.add ({
+        var item = API.add ({
             name: $scope.newItem,
             done: false
         });
+        $scope.list.push(item);
         $scope.newItem = "";
+    };
+    $scope.update = function (item) {
+        API.update(item);
     };
 
 }]);
 
-app.factory('API', function () {
-    var list = [];
+app.factory('API', ['$localStorage', '_', function ($localStorage, _) {
+
+    //generate if for every to do item
+    var generateId = function () {
+        return (new Date()).getTime();
+    };
+
+    //get current list from local storage
+    var getList = function () {
+        if (!$localStorage.todos) {
+            return [];
+        }
+        return JSON.parse($localStorage.todos);
+    };
+
+    //set current list to local storage
+    var setList = function (list) {
+        if (!list) {
+            list = [];
+        }
+        $localStorage.todos = JSON.stringify(list);
+    };
 
     return {
         get: function () {
-            return list;
+            return getList();
         },
         add: function (item) {
+            var list = getList();
+            item.id = generateId();
             list.push(item);
-            return list;
+            setList(list);
+            return item;
+        },
+        update: function (item) {
+            if (!item.id) {
+                throw new Error('item id not found')
+            }
+            var list = getList();
+            var it = _.findWhere(list, {id: item.id});
+            if (!it) {
+                throw new Error('item not found');
+            }
+            _.extend(it, item);
+            setList(list);
+            return it;
         }
     }
 
-});
+}]);
 
 app.directive('todoItem', function () {
 
     return {
         restrict: 'E',
         scope: {
-            todo: '='
+            todo: '=',
+            update: '&'
         },
         templateUrl: 'view/todoItem.html'
     }

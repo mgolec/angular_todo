@@ -1,4 +1,4 @@
 <h3 class="{{todo.done ? 'line-through' : ''}}">
-    <input type="checkbox" ng-model="todo.done">
+    <input type="checkbox" ng-model="todo.done" ng-click="update()">
     {{todo.name}}
 </h3>
