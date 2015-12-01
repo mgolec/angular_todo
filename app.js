@@ -4,7 +4,7 @@
 
 var app = angular.module('todoApp', []);
 
-app.controller('IndexPageController', function ($scope, API) {
+app.controller('IndexPageController', ['$scope', 'API', function ($scope, API) {
     //app logic
 
     $scope.list = API.get();
@@ -16,7 +16,7 @@ app.controller('IndexPageController', function ($scope, API) {
         $scope.newItem = "";
     };
 
-});
+}]);
 
 app.factory('API', function () {
     var list = [];
@@ -36,7 +36,11 @@ app.factory('API', function () {
 app.directive('todoItem', function () {
 
     return {
-        template: '<h3 class="{{todo.done ? "line-through" : ""}}"><input type="checkbox" ng-model="todo.done"> {{todo.name}}</h3>'
+        restrict: 'E',
+        scope: {
+            todo: '='
+        },
+        templateUrl: 'view/todoItem.html'
     }
 
 });
