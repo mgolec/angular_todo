@@ -8,19 +8,29 @@ app.constant('_', _);
 app.controller('IndexPageController', ['$scope', 'API', function ($scope, API) {
     //app logic
 
-    $scope.list = API.get();
+
+    var updateList = function () {
+        var list = API.get();
+        $scope.activeList = _.where(list, {done: false});
+        $scope.doneList = _.where(list, {done: true});
+    };
+
     $scope.submit = function () {
         var item = API.add ({
             name: $scope.newItem,
             done: false
         });
-        $scope.list.push(item);
+
+        updateList();
         $scope.newItem = "";
     };
     $scope.update = function (item) {
         API.update(item);
+        updateList();
+
     };
 
+    updateList();
 }]);
 
 app.factory('API', ['$localStorage', '_', function ($localStorage, _) {
