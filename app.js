@@ -30,6 +30,11 @@ app.controller('IndexPageController', ['$scope', 'API', function ($scope, API) {
 
     };
 
+    $scope.archiveAll = function () {
+        API.archiveAll();
+        updateList();
+    };
+
     updateList();
 }]);
 
@@ -41,44 +46,57 @@ app.factory('API', ['$localStorage', '_', function ($localStorage, _) {
     };
 
     //get current list from local storage
-    var getList = function () {
-        if (!$localStorage.todos) {
+    var getList = function (name) {
+        if (!$localStorage[name]) {
             return [];
         }
-        return JSON.parse($localStorage.todos);
+        return JSON.parse($localStorage[name]);
     };
 
     //set current list to local storage
-    var setList = function (list) {
+    var setList = function (name, list) {
         if (!list) {
             list = [];
         }
-        $localStorage.todos = JSON.stringify(list);
+        $localStorage[name] = JSON.stringify(list);
     };
 
     return {
         get: function () {
-            return getList();
+            return getList('todos');
         },
         add: function (item) {
-            var list = getList();
+            var list = getList('todos');
             item.id = generateId();
+            item.createdAt = (new Date()).getTime();
+            item.updatedAt = item.createdAt;
             list.push(item);
-            setList(list);
+            setList('todos', list);
             return item;
         },
         update: function (item) {
             if (!item.id) {
                 throw new Error('item id not found')
             }
-            var list = getList();
+            var list = getList('todos');
             var it = _.findWhere(list, {id: item.id});
             if (!it) {
                 throw new Error('item not found');
             }
             _.extend(it, item);
-            setList(list);
+            it.updatedAt = (new Date()).getTime();
+            setList('todos', list);
             return it;
+        },
+        archiveAll: function () {
+            var list = getList('todos');
+            var activeList = _.where(list, {done: false});
+            setList('todos', activeList);
+
+            var doneList = _.where(list, {done: true});
+            var archiveList = getList('archiveTodos');
+            archiveList = _.union(archiveList, doneList);
+            setList('archiveTodos', archiveList);
         }
     }
 
