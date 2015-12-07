@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <input class="input-lg form-control fg-input" type="text" ng-model="query" placeholder="Search my to do's">
+            <ul style="list-style: none;">
+                <li ng-repeat="archivedtodo in archiveList | filter:query | orderBy: '-updatedAt' ">
+                    <archive-item archivedtodo="archivedtodo" undo="undo(archivedtodo)"></archive-item>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

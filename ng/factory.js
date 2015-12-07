@@ -1,44 +1,6 @@
-/**
- * Created by Laptop on 27.11.2015..
- */
+var factories = angular.module('factories', ['ngStorage']);
 
-var app = angular.module('todoApp', ['ngStorage']);
-app.constant('_', _);
-
-app.controller('IndexPageController', ['$scope', 'API', function ($scope, API) {
-    //app logic
-
-
-    var updateList = function () {
-        var list = API.get();
-        $scope.activeList = _.where(list, {done: false});
-        $scope.doneList = _.where(list, {done: true});
-    };
-
-    $scope.submit = function () {
-        var item = API.add ({
-            name: $scope.newItem,
-            done: false
-        });
-
-        updateList();
-        $scope.newItem = "";
-    };
-    $scope.update = function (item) {
-        API.update(item);
-        updateList();
-
-    };
-
-    $scope.archiveAll = function () {
-        API.archiveAll();
-        updateList();
-    };
-
-    updateList();
-}]);
-
-app.factory('API', ['$localStorage', '_', function ($localStorage, _) {
+factories.factory('API', ['$localStorage', '_', function ($localStorage, _) {
 
     //generate if for every to do item
     var generateId = function () {
@@ -65,6 +27,10 @@ app.factory('API', ['$localStorage', '_', function ($localStorage, _) {
         get: function () {
             return getList('todos');
         },
+        getArchive: function () {
+            return getList('archiveTodos');
+        },
+
         add: function (item) {
             var list = getList('todos');
             item.id = generateId();
@@ -97,21 +63,25 @@ app.factory('API', ['$localStorage', '_', function ($localStorage, _) {
             var archiveList = getList('archiveTodos');
             archiveList = _.union(archiveList, doneList);
             setList('archiveTodos', archiveList);
+        },
+        undo: function (item) {
+            if (!item.id) {
+                throw new Error('item not found');
+            }
+            var list = getList('archiveTodos');
+            var it = _.findWhere(list, {id: item.id});
+            if (!it) {
+                throw new Error('item not found');
+            }
+            list = _.without(list, it);
+            setList('archiveTodos', list);
+
+            it.updatedAt = (new Date()).getTime();
+            var activeList = getList('todos');
+            activeList.push(it);
+            setList('todos', activeList);
+            return;
         }
     }
 
 }]);
-
-app.directive('todoItem', function () {
-
-    return {
-        restrict: 'E',
-        scope: {
-            todo: '=',
-            update: '&'
-        },
-        templateUrl: 'view/todoItem.html'
-    }
-
-});
-

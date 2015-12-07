@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <input class="input-lg form-control fg-input" type="text" ng-model="query" placeholder="Search my to do's">
+            <ul style="list-style: none;">
+                <li ng-repeat="todo in activeList | filter:query | orderBy: '-updatedAt' ">
+                    <todo-item todo="todo" update="update(todo)"></todo-item>
+                </li>
+            </ul>
+            <hr/>
+            <div class="row">
+                <div class="col-lg-10">
+                    <hr>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn btn-default" ng-click="archiveAll()">Archive All</button>
+                </div>
+            </div>
+            <ul style="list-style: none;">
+                <li ng-repeat="todo in doneList | filter:query | orderBy: 'updatedAt' ">
+                    <todo-item todo="todo" update="update(todo)"></todo-item>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-lg-6">
+            <form ng-submit="submit()">
+                <input class="input-lg form-control fg-input" type="text" ng-model="newItem"
+                       placeholder="Add some to do" required=""/>
+                <br/>
+                <button class="btn btn-default" type="submit">Add new to do</button>
+            </form>
+        </div>
+
+    </div>
+</div>

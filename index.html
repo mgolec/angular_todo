@@ -10,7 +10,17 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/ngstorage/ngStorage.min.js"></script>
 <script src="bower_components/underscore/underscore-min.js"></script>
-<script src="app.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
+
+<script src="ng/app.js"></script>
+<!-- Factory -->
+<script src="ng/factory.js"></script>
+<!-- Directives -->
+<script src="views/directives/directives.js"></script>
+<!-- Pages -->
+<script src="views/pages/home/home.js"></script>
+<script src="views/pages/archive/archive.js"></script>
+<script src="views/pages/pages.js"></script>
 
 <!--
  _____           _____   _____
@@ -34,47 +44,13 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="#/">Home</a></li>
+            <li><a href="#/archive">Archive</a></li>
         </ul>
     </div>
 </nav>
 
-<div class="container" ng-controller="IndexPageController">
-    <div class="row">
-        <div class="col-lg-6">
-            <input class="input-lg form-control fg-input" type="text" ng-model="query" placeholder="Search my to do's">
-            <ul style="list-style: none;">
-                <li ng-repeat="todo in activeList | filter:query | orderBy: '-updatedAt' ">
-                    <todo-item todo="todo" update="update(todo)"></todo-item>
-                </li>
-            </ul>
-            <hr/>
-            <div class="row">
-                <div class="col-lg-10">
-                    <hr>
-                </div>
-                <div class="col-lg-2">
-                    <button class="btn btn-default" ng-click="archiveAll()">Archive All</button>
-                </div>
-            </div>
-            <ul style="list-style: none;">
-                <li ng-repeat="todo in doneList | filter:query | orderBy: 'updatedAt' ">
-                    <todo-item todo="todo" update="update(todo)"></todo-item>
-                </li>
-            </ul>
-        </div>
-
-        <div class="col-lg-6">
-            <form ng-submit="submit()">
-                <input class="input-lg form-control fg-input" type="text" ng-model="newItem"
-                       placeholder="Add some to do" required=""/>
-                <br/>
-                <button class="btn btn-default" type="submit">Add new to do</button>
-            </form>
-        </div>
-
-    </div>
-</div>
+<div ng-view></div>
 
 </body>
 </html>
